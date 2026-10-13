@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Design an acrylic recognition award and download manufacturing files (STL, DXF, PDF drawing, artwork).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E">
+<title>Award Builder: acrylic recognition awards</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<noscript><p style="padding:20px;font:16px sans-serif">Award Builder needs JavaScript. Please enable it and reload. / يحتاج مصمم الدروع إلى تفعيل JavaScript.</p></noscript>
+<div class="page">
+<header class="top">
+  <div class="brand">
+    <svg width="34" height="38" viewBox="0 0 34 38" aria-hidden="true"><path d="M6 30V12a11 11 0 0 1 22 0v18Z" fill="#9FE3E6" fill-opacity=".25" stroke="#0F6B5C" stroke-width="2"/><rect x="2" y="30" width="30" height="7" rx="1.5" fill="#18222D"/><path d="M11 16h12M13 20h8" stroke="#0F6B5C" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <div><h1 data-t="appTitle">Award Builder</h1><p data-t="appSub"></p></div>
+  </div>
+  <div class="top-actions">
+    <button class="btn quiet small" id="btnRules"><span data-t="rulesBtn">Manufacturer rules</span><span class="pending-pill" id="pendingPill"></span></button>
+    <button class="btn small" id="btnLang" lang="ar">عربي</button>
+  </div>
+</header>
+<main class="app" id="app">
+  <section class="ticket" aria-labelledby="stepTitle">
+    <ol class="steps" id="steps"></ol>
+
+    <div class="step" data-step="1">
+      <h2 data-t="s1Title" id="stepTitle"></h2>
+      <p class="lede" data-t="s1Lede"></p>
+      <div class="cards c4" id="shapeGrid"></div>
+    </div>
+
+    <div class="step" data-step="2" hidden>
+      <h2 data-t="s2Title"></h2>
+      <p class="lede" data-t="s2Lede"></p>
+      <div class="cards sizes" id="sizePresets" role="group" aria-label="Size"></div>
+      <div class="field"><label for="slH" class="flabel q" data-t="howTall"></label>
+        <div class="range"><input type="range" id="slH" data-slide="H" step="5"><output id="slHOut" for="slH"></output></div>
+        <p class="hint" id="slHHint"></p></div>
+      <div class="field"><label for="slW" class="flabel q" data-t="howWide"></label>
+        <div class="range"><input type="range" id="slW" data-slide="W" step="5"><output id="slWOut" for="slW"></output></div>
+        <p class="hint" data-t="howWideHint"></p></div>
+      <p class="ferr" id="errSize" hidden></p>
+      <div class="total" id="totalBox">
+        <svg width="54" height="70" viewBox="0 0 54 70" aria-hidden="true"><path d="M8 52V18a11 11 0 0 1 22 0v34Z" fill="#9FE3E6" fill-opacity=".3" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="52" width="32" height="12" rx="1.5" fill="currentColor" opacity=".85"/><path d="M40 7v45M37 10l3-3 3 3M37 49l3 3 3-3" stroke="#0F6B5C" stroke-width="1.6" fill="none"/><path d="M48 7v57M45 10l3-3 3 3M45 61l3 3 3-3" stroke="#A87A1F" stroke-width="1.8" fill="none"/></svg>
+        <div><p class="small" id="totalLbl"></p><div class="big" id="totalVal"></div><p class="small" id="totalBreak"></p><p class="small" id="phoneCmp"></p></div>
+      </div>
+      <details class="exact" id="exactBox"><summary data-t="exactSum"></summary>
+        <div class="exact-body">
+          <div class="field"><span class="flabel" data-t="units"></span>
+            <div class="seg" id="unitSeg"><button type="button" data-u="cm" data-t="cm"></button><button type="button" data-u="mm" data-t="mm"></button></div></div>
+          <div class="row2">
+            <div class="field"><label for="inW" data-t="fW"></label><div class="inwrap" id="wrapW"><input id="inW" inputmode="decimal" autocomplete="off" data-num="W"><span class="unit u-len"></span></div><p class="hint" data-t="fWHint"></p><p class="ferr" id="errW" hidden></p></div>
+            <div class="field"><label for="inH" data-t="fH"></label><div class="inwrap" id="wrapH"><input id="inH" inputmode="decimal" autocomplete="off" data-num="H"><span class="unit u-len"></span></div><p class="hint" data-t="fHHint"></p><p class="ferr" id="errH" hidden></p></div>
+          </div>
+        </div>
+      </details>
+      <div class="field"><span class="flabel" data-t="fT"></span><div class="chips" id="thickChips"></div><p class="hint" data-t="fTHint"></p><p class="ferr" id="errt" hidden></p></div>
+      <div class="group">
+        <h3 data-t="baseH2"></h3>
+        <div class="cards" id="baseTypes"></div>
+        <p class="hint assume" id="slotAssume" data-t="slotAssume"></p>
+        <div id="baseOpts" class="group">
+          <div class="field"><span class="flabel" data-t="bm"></span><div class="chips" id="baseMat"></div></div>
+          <label class="check"><input type="checkbox" id="autoBase"><span data-t="autoBase"></span></label>
+          <div class="row3">
+            <div class="field"><label for="inBW" data-t="fBW"></label><div class="inwrap" id="wrapbaseW"><input id="inBW" inputmode="decimal" autocomplete="off" data-num="baseW"><span class="unit u-len"></span></div></div>
+            <div class="field"><label for="inBD" data-t="fBD"></label><div class="inwrap" id="wrapbaseD"><input id="inBD" inputmode="decimal" autocomplete="off" data-num="baseD"><span class="unit u-len"></span></div></div>
+            <div class="field"><label for="inBH" data-t="fBH"></label><div class="inwrap" id="wrapbaseH"><input id="inBH" inputmode="decimal" autocomplete="off" data-num="baseH"><span class="unit u-len"></span></div></div>
+          </div>
+          <p class="ferr" id="errbase" hidden></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" data-step="3" hidden>
+      <h2 data-t="s3Title"></h2>
+      <p class="lede" data-t="s3Lede"></p>
+      <div class="chips"><button type="button" class="chip" id="exAr" data-t="exAr"></button><button type="button" class="chip" id="exEn" data-t="exEn"></button><button type="button" class="chip" id="exClear" data-t="exClear"></button></div>
+      <div class="field"><label for="tHeading" data-t="fHeading"></label><input class="txt" id="tHeading" dir="auto" data-text="heading" autocomplete="off"></div>
+      <div class="field"><label for="tName" data-t="fName"></label><input class="txt" id="tName" dir="auto" data-text="name" autocomplete="off"></div>
+      <div class="field"><label for="tBody" data-t="fBody"></label><textarea class="txt" id="tBody" dir="auto" rows="3" data-text="body"></textarea><p class="hint" data-t="fBodyHint"></p></div>
+      <div class="field"><label for="tFooter" data-t="fFooter"></label><input class="txt" id="tFooter" dir="auto" data-text="footer" autocomplete="off"></div>
+      <div class="field"><label for="tScale" data-t="fTextSize"></label><div class="range"><input type="range" id="tScale" min="70" max="130" step="5"><output id="tScaleOut"></output></div></div>
+      <div class="group">
+        <h3 data-t="logoH"></h3>
+        <input type="file" id="logoFile" accept="image/png,image/jpeg,image/webp,image/svg+xml,.svg" hidden>
+        <div id="logoEmpty" class="logo-box"><button type="button" class="btn" id="logoPick" data-t="logoUpload"></button><p class="small" data-t="logoTypes"></p></div>
+        <div id="logoFull" class="group" hidden>
+          <div class="logo-box"><img id="logoThumb" alt=""><div class="meta" id="logoMeta"></div><button type="button" class="btn small" id="logoReplace" data-t="logoReplace"></button><button type="button" class="btn small quiet" id="logoRemove" data-t="logoRemove"></button></div>
+          <div class="field"><label for="lScale" data-t="logoSize"></label><div class="range"><input type="range" id="lScale" min="40" max="160" step="5"><output id="lScaleOut"></output></div></div>
+        </div>
+        <p class="ferr" id="errLogo" hidden></p>
+      </div>
+      <div id="fitBox"></div>
+    </div>
+
+    <div class="step" data-step="4" hidden>
+      <h2 data-t="s4Title"></h2>
+      <p class="lede" data-t="s4Lede"></p>
+      <div class="group"><h3 data-t="method"></h3><div class="cards" id="methodCards"></div></div>
+      <div class="field" id="colorField"><span class="flabel" data-t="color"></span><div class="swatches" id="swatches"></div></div>
+      <div class="group"><h3 data-t="side"></h3><div class="cards" id="sideCards"></div></div>
+    </div>
+
+    <div class="step" data-step="5" hidden>
+      <h2 data-t="s5Title"></h2>
+      <p class="lede" data-t="s5Lede"></p>
+      <div class="group"><h3 data-t="orderH"></h3>
+        <div class="row2">
+          <div class="field"><label for="mCustomer" data-t="fCustomer"></label><input class="txt" id="mCustomer" dir="auto" data-meta="customer" autocomplete="name"></div>
+          <div class="field"><label for="mOrg" data-t="fOrg"></label><input class="txt" id="mOrg" dir="auto" data-meta="org" autocomplete="organization"></div>
+        </div>
+        <div class="field" style="max-width:160px"><label for="mQty" data-t="fQty"></label><div class="inwrap" id="wrapqty"><input id="mQty" inputmode="numeric" autocomplete="off"></div><p class="ferr" id="errqty" hidden></p></div>
+        <div class="field"><label for="mNotes" data-t="fNotes"></label><textarea class="txt" id="mNotes" dir="auto" rows="2" data-meta="notes"></textarea></div>
+      </div>
+      <div class="group"><h3 data-t="summaryH"></h3><dl class="summary" id="summary"></dl></div>
+      <div id="approveArea" class="group"></div>
+    </div>
+
+    <nav class="stepnav"><button type="button" class="btn quiet" id="prevBtn" data-t="prev"></button><button type="button" class="btn quiet small" id="resetBtn" data-t="startOver"></button><button type="button" class="btn primary" id="nextBtn" data-t="next"></button></nav>
+  </section>
+
+  <section class="case" aria-label="Preview">
+    <div class="case-tabs" role="tablist" id="viewTabs">
+      <button role="tab" data-view="front" aria-selected="true" data-t="v_front"></button>
+      <button role="tab" data-view="3d" aria-selected="false" data-t="v_3d"></button>
+      <button role="tab" data-view="drawing" aria-selected="false" data-t="v_drawing"></button>
+    </div>
+    <div class="stage">
+      <div class="view" id="viewFront"></div>
+      <div class="view" id="view3d" hidden><canvas id="c3d"></canvas><p class="overlay-hint" data-t="hint3d"></p></div>
+      <div class="view sheet-wrap" id="viewDrawing" hidden>
+        <div class="sheet-bar"><span data-t="drawingNote"></span><button type="button" class="btn small" id="zoomBtn" data-t="zoom"></button></div>
+        <div id="sheet"></div>
+      </div>
+    </div>
+    <div class="case-foot">
+      <div class="readout" id="readout"></div>
+      <div class="legend" id="legend"><span class="lg-item"><i></i><span data-t="safeLegend"></span></span><label class="lg-item lg-toggle"><input type="checkbox" id="phoneToggle"><span data-t="phoneShow"></span></label><span class="lg-item" data-t="notActual"></span></div>
+      <div class="issues" id="issues"></div>
+    </div>
+  </section>
+</main>
+</div>
+
+<dialog id="rulesDlg" aria-labelledby="rulesTitle">
+  <div class="dlg">
+    <div class="dlg-head"><h2 id="rulesTitle" data-t="rulesTitle"></h2><p data-t="rulesLede"></p></div>
+    <div class="dlg-body" id="rulesBody"></div>
+    <div class="dlg-foot"><button type="button" class="btn quiet" id="rulesReset" data-t="rulesReset"></button><button type="button" class="btn primary" id="rulesClose" data-t="close"></button></div>
+  </div>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="vendor/opentype.min.js"></script>
+<script src="vendor/earcut.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/three.min.js"></script>
+<script src="js/core.js"></script>
+<script src="assets/fonts.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
