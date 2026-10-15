@@ -13,6 +13,17 @@ const STR = {
 en: {
   appTitle: 'Award Builder', appSub: 'Design an acrylic award and get files your manufacturer can cut.',
   rulesBtn: 'Manufacturer rules', langBtn: 'عربي',
+  signIn: 'Continue with Google', signOut: 'Sign out', adminLink: 'Admin', planLabel: '{name} plan', exportsLabel: 'Exports: {n}',
+  suspendedBadge: 'Suspended', signInToDownload: 'Sign in with Google to download the manufacturing files. Designing and previewing work without an account.',
+  suspendedNotice: 'Your account is suspended, so files can’t be downloaded. Contact the administrator to restore access.',
+  suspendedSignin: 'This account is suspended and can’t sign in. Contact the administrator.', signInFailed: 'Sign-in failed: {msg}',
+  sessionExpired: 'Your session has ended. Please sign in again.', limitReached: 'You’ve reached this month’s export limit for your plan.',
+  serverRejected: 'The server rejected this design: {msg}', tooLarge: 'The design is too large to send (usually the logo). Use a logo under 4 MB.',
+  networkError: 'Couldn’t reach the server. Check your connection and try again.', notConfigured: 'Downloads need the account service, which isn’t connected yet (see README).',
+  preparingServer: 'Generating your files on the server…', savedNoPng: 'Saved {name} (the artwork PNG couldn’t be added; download it separately).',
+  serverFilesNote: 'Files are generated on the server for {email} and counted on your account.',
+  rulesReadOnly: 'Set by the administrator. Only the administrator account can change these values.', rulesSave: 'Save for all customers',
+  rulesSaved: 'Rules saved for all customers.', rulesSaveFailed: 'Couldn’t save the rules: {msg}',
   s1: 'Shape', s2: 'Size', s3: 'Text & logo', s4: 'Finish', s5: 'Approve',
   s1Title: 'Choose a shape', s1Lede: 'You can set the exact size in the next step.',
   shape_rectangle: 'Rectangle', shape_arch: 'Arch', shape_shield: 'Shield', shape_flame: 'Flame',
@@ -45,7 +56,7 @@ en: {
   fTextSize: 'Text size', logoH: 'Logo (optional)', logoUpload: 'Upload logo',
   logoTypes: 'A PNG with a transparent background or an SVG works best. JPG is accepted.',
   logoReplace: 'Replace', logoRemove: 'Remove', logoSize: 'Logo size',
-  logoErrType: 'Use a PNG, JPG, WebP or SVG file.', logoErrSize: 'The file is larger than 8 MB.', logoErrRead: 'This image couldn’t be read. Try another file.',
+  logoErrType: 'Use a PNG, JPG, WebP or SVG file.', logoErrSize: 'The file is larger than 4 MB.', logoErrRead: 'This image couldn’t be read. Try another file.',
   logoNotSaved: 'This logo is too large to keep after a reload; re-upload it if the page is reopened.',
   fitOk: 'Everything fits inside the safe area.',
   safeLegend: 'Dashed line: safe area for text and logo',
@@ -115,6 +126,17 @@ en: {
 ar: {
   appTitle: 'مصمم الدروع', appSub: 'صمّم درعا من الأكريليك واحصل على ملفات جاهزة للتصنيع.',
   rulesBtn: 'قواعد المصنع', langBtn: 'English',
+  signIn: 'المتابعة باستخدام Google', signOut: 'تسجيل الخروج', adminLink: 'لوحة الإدارة', planLabel: 'الخطة: {name}', exportsLabel: 'التنزيلات: {n}',
+  suspendedBadge: 'موقوف', signInToDownload: 'سجّل الدخول باستخدام Google لتنزيل ملفات التصنيع. التصميم والمعاينة متاحان دون حساب.',
+  suspendedNotice: 'حسابك موقوف، لذا لا يمكن تنزيل الملفات. تواصل مع المسؤول لاستعادة الوصول.',
+  suspendedSignin: 'هذا الحساب موقوف ولا يمكنه تسجيل الدخول. تواصل مع المسؤول.', signInFailed: 'تعذّر تسجيل الدخول: {msg}',
+  sessionExpired: 'انتهت جلستك. سجّل الدخول مرة أخرى.', limitReached: 'وصلت إلى حد التنزيل الشهري في خطتك.',
+  serverRejected: 'رفض الخادم هذا التصميم: {msg}', tooLarge: 'التصميم أكبر من المسموح للإرسال (غالبا بسبب الشعار). استخدم شعارا أقل من 4 ميجابايت.',
+  networkError: 'تعذّر الاتصال بالخادم. تحقق من الاتصال وحاول مرة أخرى.', notConfigured: 'التنزيل يتطلب ربط خدمة الحسابات أولا (راجع README).',
+  preparingServer: 'جارٍ إنشاء ملفاتك على الخادم…', savedNoPng: 'تم حفظ {name} (تعذّرت إضافة صورة PNG؛ نزّلها منفصلة).',
+  serverFilesNote: 'تُنشأ الملفات على الخادم للحساب {email} وتُحتسب ضمن تنزيلاتك.',
+  rulesReadOnly: 'يحددها المسؤول، ولا يمكن تعديلها إلا من حساب المسؤول.', rulesSave: 'حفظ لجميع العملاء',
+  rulesSaved: 'حُفظت القواعد لجميع العملاء.', rulesSaveFailed: 'تعذّر حفظ القواعد: {msg}',
   s1: 'الشكل', s2: 'المقاسات', s3: 'النص والشعار', s4: 'التنفيذ', s5: 'الاعتماد',
   s1Title: 'اختر شكل الدرع', s1Lede: 'يمكنك تحديد المقاس بدقة في الخطوة التالية.',
   shape_rectangle: 'مستطيل', shape_arch: 'قوس', shape_shield: 'ترس', shape_flame: 'شعلة',
@@ -147,7 +169,7 @@ ar: {
   fTextSize: 'حجم النص', logoH: 'الشعار (اختياري)', logoUpload: 'رفع الشعار',
   logoTypes: 'يفضَّل ملف PNG بخلفية شفافة أو SVG، ويُقبل JPG.',
   logoReplace: 'استبدال', logoRemove: 'حذف', logoSize: 'حجم الشعار',
-  logoErrType: 'استخدم ملف PNG أو JPG أو WebP أو SVG.', logoErrSize: 'حجم الملف أكبر من 8 ميجابايت.', logoErrRead: 'تعذّرت قراءة الصورة. جرّب ملفا آخر.',
+  logoErrType: 'استخدم ملف PNG أو JPG أو WebP أو SVG.', logoErrSize: 'حجم الملف أكبر من 4 ميجابايت.', logoErrRead: 'تعذّرت قراءة الصورة. جرّب ملفا آخر.',
   logoNotSaved: 'الشعار كبير جدا ليُحفظ بعد إعادة التحميل؛ ارفعه مجددا إذا أعدت فتح الصفحة.',
   fitOk: 'جميع العناصر داخل المساحة الآمنة.',
   safeLegend: 'الخط المتقطع: المساحة الآمنة للنص والشعار',
@@ -228,8 +250,8 @@ function merge(def, v) {
   return o;
 }
 let P = merge(Core.defaultParams(), store.get('aw.params'));
-let RULES = merge(JSON.parse(JSON.stringify(Core.DEFAULT_RULES)), store.get('aw.rules')); // own copy: editing never mutates the defaults
-let CONF = store.get('aw.confirmed') || {};
+let RULES = Core.normalizeRules({}); // replaced by the administrator's rules from the server on load (fresh copy: never mutates the defaults)
+let CONF = {};
 const uiStored = store.get('aw.ui');
 const UI = merge({ lang: 'en', units: 'cm', step: 1, seen: [1], view: 'front', phone: true, v: 2 }, uiStored);
 if (!uiStored || uiStored.v !== 2) { UI.units = 'cm'; UI.phone = true; UI.v = 2; }
@@ -263,7 +285,7 @@ function persist() {
   const p = Object.assign({}, P);
   logoTooBig = !!(P.logo && P.logo.dataUrl.length > 2.5e6);
   if (logoTooBig) p.logo = null;
-  store.set('aw.params', p); store.set('aw.rules', RULES); store.set('aw.confirmed', CONF); store.set('aw.ui', UI); store.set('aw.approval', approval);
+  store.set('aw.params', p); store.set('aw.ui', UI); store.set('aw.approval', approval);
 }
 let toastTimer = 0;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 3200); }
@@ -337,7 +359,7 @@ async function takeLogo(file) {
   const err = $('#errLogo'); err.hidden = true;
   const isSvg = file.type === 'image/svg+xml' || /\.svg$/i.test(file.name);
   if (!isSvg && !/^image\/(png|jpeg|webp)$/.test(file.type)) { err.textContent = T('logoErrType'); err.hidden = false; return; }
-  if (file.size > 8e6) { err.textContent = T('logoErrSize'); err.hidden = false; return; }
+  if (file.size > 4e6) { err.textContent = T('logoErrSize'); err.hidden = false; return; }
   try {
     let dataUrl, pxW, pxH;
     if (isSvg) { const f = fixSvg(await file.text()); dataUrl = 'data:image/svg+xml;base64,' + b64utf8(f.txt); pxW = f.w; pxH = f.h; }
@@ -401,6 +423,7 @@ function applyLang() {
   const lb = $('#btnLang'); lb.textContent = T('langBtn'); lb.lang = UI.lang === 'ar' ? 'en' : 'ar';
   document.title = UI.lang === 'ar' ? 'مصمم الدروع: دروع أكريليك تكريمية' : 'Award Builder: acrylic recognition awards';
   renderStatic(); refreshLogoUI(); fillFields(); lastApproveSig = ''; schedule();
+  if (typeof renderAccount === 'function' && typeof account !== 'undefined') renderAccount();
   if ($('#rulesDlg').open) renderRules();
 }
 function fillNum(id, mm) { const el = $(id); if (document.activeElement !== el) el.value = toDisp(mm); }
@@ -561,12 +584,20 @@ function renderApprove(force) {
   if (!model) return;
   const valid = approvedValid();
   const errs = model.errors, warns = model.warnings, bad = Object.keys(parseErr).length > 0;
-  const sig = [UI.lang, valid, approval && approval.stale, errs.map(msgText).join('|'), warns.map(msgText).join('|'), bad, model.Ht, UI.units, DLMODE, checks.spell, checks.size, checks.warn].join('#');
+  const sig = [UI.lang, valid, approval && approval.stale, errs.map(msgText).join('|'), warns.map(msgText).join('|'), bad, model.Ht, UI.units, DLMODE, checks.spell, checks.size, checks.warn, !!sb, account.loading, account.session ? account.session.user.id : '', account.profile ? account.profile.status : ''].join('#');
   if (!force && sig === lastApproveSig) return;
   lastApproveSig = sig;
   const area = $('#approveArea');
   if (valid) {
     const zipNote = DLMODE === 'claude';
+    const seal = `<div class="seal"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 17.5l4.5 4.5L24 12.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>${esc(T('approvedH'))}</strong><span class="small">${esc(T('approvedMeta', { ref: approval.ref, at: fmtDateUi(approval.at) }))}</span></div></div>`;
+    const edit = `<div><button type="button" class="btn quiet" id="editBtn">${esc(T('editBtn'))}</button></div>`;
+    let gate = '';
+    if (!sb) gate = `<div class="notice warn">${esc(T('notConfigured'))}</div>`;
+    else if (account.loading) gate = '<p class="small" aria-busy="true">…</p>';
+    else if (!account.session) gate = `<div class="notice">${esc(T('signInToDownload'))}</div><button type="button" class="btn primary dl-main gbtn" data-signin="1">${G_LOGO}<span>${esc(T('signIn'))}</span></button>`;
+    else if (account.profile && account.profile.status !== 'active') gate = `<div class="notice err">${esc(T('suspendedNotice'))}</div>`;
+    if (gate) { area.innerHTML = seal + `<h3>${esc(T('dlH'))}</h3>` + gate + edit; return; }
     const item = (k, label) => `<button type="button" class="btn" data-dl="${k}">${esc(label)}${zipNote && (k === 'stl' || k === 'dxf') ? ` <small>(${esc(T('inZip'))})</small>` : ''}</button>`;
     area.innerHTML = `<div class="seal"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 17.5l4.5 4.5L24 12.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>${esc(T('approvedH'))}</strong><span class="small">${esc(T('approvedMeta', { ref: approval.ref, at: fmtDateUi(approval.at) }))}</span></div></div>
       ${DLMODE === 'none' ? `<div class="notice warn">${esc(T('dlUnavailable'))}</div>` : ''}
@@ -574,8 +605,9 @@ function renderApprove(force) {
       <button type="button" class="btn primary dl-main" data-dl="zip" ${DLMODE === 'none' ? 'disabled' : ''}>${esc(T('dlPkg'))}</button>
       <p class="small">${esc(T('dlPkgD'))}</p>
       <div class="dl-list">${item('pdf', T('dl_pdf'))}${item('stl', T('dl_stl'))}${item('dxf', T('dl_dxf'))}${item('ins', T('dl_ins'))}${P.logo ? item('logo', T('dl_logo')) : ''}${item('png', T('dl_png'))}${item('json', T('dl_json'))}</div>
+      <p class="small">${esc(T('serverFilesNote', { email: account.session.user.email || '' }))}</p>
       ${zipNote ? `<p class="small">${esc(T('dlNoteZip'))}</p>` : ''}
-      <div><button type="button" class="btn quiet" id="editBtn">${esc(T('editBtn'))}</button></div>`;
+      ${edit}`;
     return;
   }
   let h = '';
@@ -619,92 +651,146 @@ function artCanvas(pxPerMm, ink, mirror, logoSrc) {
   if (M.art.logo && logoSrc) { const lg = M.art.logo; g.drawImage(logoSrc, X(lg.x), Y(lg.y + lg.h), lg.w, lg.h); }
   return c;
 }
-const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
-function crc32(u8) { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC_T[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
-const blobBuf = b => b.arrayBuffer ? b.arrayBuffer() : new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => rej(fr.error); fr.readAsArrayBuffer(b); });
-async function canvasPng(c, dpi) {
-  const blob = await new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error('PNG encoding failed')), 'image/png'));
-  const src = new Uint8Array(await blobBuf(blob)), ppm = Math.round(dpi / 0.0254);
-  const ch = new Uint8Array(21), dv = new DataView(ch.buffer);
-  dv.setUint32(0, 9); ch.set([0x70, 0x48, 0x59, 0x73], 4); dv.setUint32(8, ppm); dv.setUint32(12, ppm); ch[16] = 1; dv.setUint32(17, crc32(ch.subarray(4, 17)));
-  const out = new Uint8Array(src.length + 21); out.set(src.subarray(0, 33), 0); out.set(ch, 33); out.set(src.subarray(33), 54);
-  return new Blob([out], { type: 'image/png' });
+/* ---------------- accounts (Supabase Auth) + server-side exports ---------------- */
+const CFG = window.AWARD_CONFIG || {};
+// Safety net: a secret/service key must never be published. If one is pasted into js/config.js, refuse to use it.
+const KEY_IS_SECRET = (() => { const k = String(CFG.supabasePublishableKey || ''); if (/^sb_secret_/i.test(k)) return true;
+  try { return JSON.parse(atob(k.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).role === 'service_role'; } catch (e) { return false; } })();
+if (KEY_IS_SECRET) console.error('Award Builder: js/config.js contains a SECRET key. Remove it, rotate it in Supabase, and use the publishable key.');
+const CONFIGURED = !KEY_IS_SECRET && !!(window.supabase && CFG.supabaseUrl && CFG.supabasePublishableKey && !/YOUR-PROJECT|REPLACE/i.test(CFG.supabaseUrl + CFG.supabasePublishableKey));
+const sb = CONFIGURED ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabasePublishableKey, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'aw-auth' } }) : null;
+const account = { session: null, profile: null, plans: {}, isAdmin: false, loading: CONFIGURED };
+let busy = false, lastAccountKey = '';
+function authUrlError() {
+  const u = new URL(location.href), h = new URLSearchParams(u.hash.replace(/^#/, ''));
+  return u.searchParams.get('error_description') || h.get('error_description') || '';
 }
-let pngNote = '';
-async function artPng() {
-  const M = model, Wd = M.vbb.x1 - M.vbb.x0;
-  let ppm = 300 / 25.4; if (Wd * M.H * ppm * ppm > 16e6) ppm = Math.sqrt(16e6 / (Wd * M.H));
-  const dpi = Math.floor(ppm * 25.4), ink = M.finish.method === 'laser' ? '#000000' : M.finish.color, mir = M.finish.side === 'back';
-  pngNote = '';
-  try { return { blob: await canvasPng(artCanvas(ppm, ink, mir, logoImg), dpi), dpi }; }
-  catch (e) { pngNote = 'Logo could not be rasterised in this browser; PNG contains the inscription only. Use the logo SVG/original file.'; return { blob: await canvasPng(artCanvas(ppm, ink, mir, null), dpi), dpi }; }
+function cleanAuthUrl() {
+  const u = new URL(location.href); let changed = false;
+  for (const k of ['code', 'error', 'error_code', 'error_description', 'state']) if (u.searchParams.has(k)) { u.searchParams.delete(k); changed = true; }
+  if (/access_token|error/.test(u.hash)) { u.hash = ''; changed = true; }
+  if (changed) history.replaceState(null, '', u.pathname + u.search + u.hash);
 }
-function dataUrlBytes(u) { const b = atob(u.split(',')[1]); const a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
-function makePdf() { const S = Core.drawing(model, P, drawingInfo()); return Core.drawingToPDF(S, window.jspdf.jsPDF); }
-function readme(ref, dpi) {
-  const M = model, L = Core.dxfLayers(M), mir = M.finish.side === 'back';
-  const pend = ALL_RULES.filter(k => !CONF[k]).map(k => `  - ${STR.en['r_' + k]}: ${Array.isArray(RULES[k]) ? RULES[k].join(', ') : RULES[k]}`).join('\n');
-  return [`ACRYLIC AWARD MANUFACTURING PACKAGE  ${ref}`, `Approved: ${approval ? fmtDateEn(approval.at) : '-'}   Generator v${Core.VERSION}   Units: millimetres`,
-    `Customer: ${P.meta.customer || '-'}   Organization: ${P.meta.org || '-'}   Quantity: ${P.meta.qty || 1}`,
-    P.meta.notes ? `Customer notes: ${P.meta.notes}` : '', '',
-    'All files below were generated from ONE parameter set (see design-record.json), so they agree with each other.', '',
-    `${ref}_drawing.pdf        Engineering drawing (A3): front, side, base top views, key dimensions, material, assembly, tolerances.`,
-    `${ref}_award-3d.stl       3D geometry, binary STL in mm, Z up. Two closed bodies: plaque (with tab) and base (with pocket), assembled.`,
-    '                          Artwork is NOT in the STL: surface laser engraving / UV print are applied from the artwork files.',
-    `${ref}_cutting-outlines.dxf  1:1 cutting outlines, DXF R12, mm. Layers:`,
-    `                          ${L.plaque}  plaque outline incl. insertion tab`,
-    L.base ? `                          ${L.base}  base footprint (block height in layer name)` : '',
-    L.pocket ? `                          ${L.pocket}  base pocket outline (pocket depth in layer name; corners include router-radius relief)` : '',
-    L.pocket ? '                          PROTOTYPE ASSUMPTION: pocket is CNC-routed into a solid base block. Confirm the method before production.' : '',
-    `                          Curves are fine polylines (max deviation ${RULES.curveTol} mm). No kerf offset applied: compensate in CAM.`,
-    `${ref}_inscription${mir ? '-MIRRORED' : ''}.svg  Inscription as vector outlines (no font needed), actual size. Layer "reference-outline" is for alignment only: do not engrave/print it.`,
-    P.logo ? `${ref}_logo-placed${mir ? '-MIRRORED' : ''}.svg  Logo at final size and position on the same artboard.` : '',
-    P.logo ? `${ref}_logo-original.*  The logo exactly as uploaded.` : '',
-    `${ref}_artwork-${dpi}dpi${mir ? '-MIRRORED' : ''}.png  Combined artwork raster at ${dpi} dpi (DPI stored in file), transparent background.`,
-    pngNote ? `                          NOTE: ${pngNote}` : '',
-    `${ref}_design-record.json  Every input parameter, manufacturing rule and derived dimension.`, '',
-    `Artwork process: ${M.finish.method === 'laser' ? 'laser engraving (artwork in black = engrave)' : 'UV print, colour ' + M.finish.color}; surface: ${mir ? 'BACK (files mirrored so they read correctly from the front)' : 'front'}.`,
-    'Artboard origin: top-left of the plaque bounding box; artboard = plaque width x plaque height above base.', '',
-    pend ? 'RULES NOT YET CONFIRMED BY THE MANUFACTURER (prototype defaults):\n' + pend : 'All manufacturing rules marked as confirmed by the manufacturer.', ''
-  ].filter(l => l !== '').join('\n') + '\n';
-}
-async function buildFile(kind) {
-  const ref = refNow(), mir = model.finish.side === 'back' ? '-MIRRORED' : '';
-  switch (kind) {
-    case 'pdf': return { name: `${ref}_drawing.pdf`, data: makePdf().output('arraybuffer') };
-    case 'stl': return { name: `${ref}_award-3d.stl`, data: Core.stl(model, ref) };
-    case 'dxf': return { name: `${ref}_cutting-outlines.dxf`, data: Core.dxf(model) };
-    case 'ins': return { name: `${ref}_inscription${mir}.svg`, data: Core.artworkSVG(model, P, 'inscription', ref) };
-    case 'logo': return { name: `${ref}_logo-placed${mir}.svg`, data: Core.artworkSVG(model, P, 'logo', ref) };
-    case 'png': { const r = await artPng(); return { name: `${ref}_artwork-${r.dpi}dpi${mir}.png`, data: new Uint8Array(await blobBuf(r.blob)), dpi: r.dpi }; }
-    case 'json': return { name: `${ref}_design-record.json`, data: JSON.stringify(Core.spec(model, P, RULES, { reference: ref, approvedAt: approval && approval.at, confirmedRules: CONF }), null, 2) };
+async function loadAccount() {
+  if (!sb) { account.loading = false; renderAccount(); return; }
+  const { data } = await sb.auth.getSession();
+  const session = data && data.session;
+  account.session = session || null; account.profile = null; account.isAdmin = false;
+  if (session) {
+    const [p, pl, adm] = await Promise.all([
+      sb.from('profiles').select('id, email, full_name, avatar_url, status, plan_id, export_count').eq('id', session.user.id).maybeSingle(),
+      sb.from('plans').select('id, name'),
+      sb.rpc('current_user_is_admin')]);
+    account.profile = p.data || null; account.isAdmin = adm.data === true;
+    (pl.data || []).forEach(x => { account.plans[x.id] = x.name; });
   }
-  return null;
+  account.loading = false;
+  renderAccount(); lastApproveSig = ''; renderApprove(true);
 }
+async function loadRules() {
+  if (!sb) return;
+  const { data, error } = await sb.from('app_settings').select('value').eq('key', 'manufacturing_rules').maybeSingle();
+  if (error || !data || !data.value) return;
+  RULES = Core.normalizeRules(data.value.rules || {}); CONF = data.value.confirmed || {};
+  if (!RULES.thicknesses.includes(P.t)) P.t = RULES.thicknesses.reduce((a, b) => Math.abs(b - P.t) < Math.abs(a - P.t) ? b : a);
+  presetCache.clear(); renderStatic(); schedule();
+  if ($('#rulesDlg').open) renderRules();
+}
+function signIn() {
+  if (!sb) { toast(T('notConfigured')); return; }
+  sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } })
+    .then(({ error }) => { if (error) toast(T('signInFailed', { msg: error.message })); });
+}
+async function signOut() {
+  if (sb) { try { await sb.auth.signOut(); } catch (e) { /* local session is cleared below anyway */ } }
+  account.session = null; account.profile = null; account.isAdmin = false;
+  renderAccount(); lastApproveSig = ''; renderApprove(true);
+}
+const G_LOGO = '<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+function renderAccount() {
+  const box = $('#account'); if (!box) return;
+  let h = '';
+  if (!sb) h = '';
+  else if (account.loading) h = '<span class="acct-wait" aria-busy="true">…</span>';
+  else if (!account.session) h = `<button type="button" class="btn small gbtn" data-signin="1">${G_LOGO}<span>${esc(T('signIn'))}</span></button>`;
+  else {
+    const pr = account.profile || {}, name = pr.full_name || account.session.user.email || '';
+    const plan = account.plans[pr.plan_id] || pr.plan_id || '';
+    const susp = pr.status === 'suspended';
+    h = `<span class="who"><span class="avatar" aria-hidden="true">${esc((name.trim()[0] || '?').toUpperCase())}</span><span class="who-txt"><b>${esc(name)}</b><small>${susp ? `<span class="badge-susp">${esc(T('suspendedBadge'))}</span>` : esc(T('planLabel', { name: plan }))}${pr.export_count != null ? ' · ' + esc(T('exportsLabel', { n: pr.export_count })) : ''}</small></span></span>`
+      + (account.isAdmin ? `<a class="btn quiet small" href="admin.html">${esc(T('adminLink'))}</a>` : '')
+      + `<button type="button" class="btn quiet small" data-signout="1">${esc(T('signOut'))}</button>`;
+  }
+  const key = h + UI.lang;
+  if (key !== lastAccountKey) { box.innerHTML = h; lastAccountKey = key; }
+}
+async function serverExport(kind, extra) {
+  const { data } = await sb.auth.getSession();
+  const session = data && data.session;
+  if (!session) throw { status: 401, code: 'not_signed_in' };
+  let r;
+  try {
+    r = await fetch(CFG.supabaseUrl + '/functions/v1/export', { method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: CFG.supabasePublishableKey, Authorization: 'Bearer ' + session.access_token },
+      body: JSON.stringify(Object.assign({ design: P, kind }, extra || {})) });
+  } catch (e) { throw { code: 'network' }; }
+  if (!r.ok) { let b = {}; try { b = await r.json(); } catch (e) { /* non-JSON error */ } throw { status: r.status, code: b.error || ('http_' + r.status), details: b.details }; }
+  const bytes = new Uint8Array(await r.arrayBuffer());
+  const name = r.headers.get('x-export-file') || (/filename="([^"]+)"/.exec(r.headers.get('content-disposition') || '') || [])[1] || ('award-' + kind);
+  const cnt = r.headers.get('x-export-count'); if (cnt && account.profile) account.profile.export_count = +cnt;
+  return { name, bytes, ref: r.headers.get('x-export-reference') };
+}
+function exportError(e) {
+  if (e.status === 401) { toast(T('sessionExpired')); signOut(); return; }
+  if (e.code === 'suspended') { if (account.profile) account.profile.status = 'suspended'; renderAccount(); lastApproveSig = ''; renderApprove(true); toast(T('suspendedNotice')); return; }
+  if (e.code === 'limit_reached') { toast(T('limitReached')); return; }
+  if (e.code === 'invalid_design') { toast(T('serverRejected', { msg: (e.details || []).map(d => msgText({ lv: 'error', code: d.code, vals: d.vals || {} })).join(' ') })); return; }
+  if (e.code === 'too_large' || e.status === 413) { toast(T('tooLarge')); return; }
+  if (e.code === 'network') { toast(T('networkError')); return; }
+  toast(T('dlFail', { name: '', msg: e.code || 'error' }));
+}
+function setBusy(on) { document.querySelectorAll('[data-dl]').forEach(b => { b.disabled = on; }); }
 async function download(kind) {
   if (!approvedValid()) return;
+  if (!sb) { toast(T('notConfigured')); return; }
+  if (!account.session) { toast(T('signInToDownload')); return; }
+  if (account.profile && account.profile.status !== 'active') { toast(T('suspendedNotice')); return; }
+  if (busy) return;
+  busy = true; setBusy(true);
   try {
+    toast(T('preparingServer'));
     if (kind === 'zip') {
-      if (!window.JSZip) throw new Error('JSZip not loaded');
-      toast(T('preparing', { name: '.zip' }));
-      const zip = new window.JSZip(); let dpi = 300;
-      for (const k of ['pdf', 'stl', 'dxf', 'ins', 'logo', 'png', 'json']) {
-        if (k === 'logo' && !P.logo) continue;
-        const f = await buildFile(k); if (k === 'png') dpi = f.dpi;
-        zip.file(f.name, f.data);
-      }
-      if (P.logo) { const ext = P.logo.svg ? 'svg' : (P.logo.mime.split('/')[1] || 'png').replace('jpeg', 'jpg'); zip.file(`${refNow()}_logo-original.${ext}`, dataUrlBytes(P.logo.dataUrl)); }
-      zip.file('README.txt', readme(refNow(), dpi));
-      const u8 = await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' });
-      await saveFile(`${refNow()}_manufacturing-package.zip`, new Blob([u8], { type: 'application/zip' })); return;
+      // Two server requests keep each one well inside the backend's CPU limit; both files come from the server.
+      const z = await serverExport('zip');
+      let bytes = z.bytes, pngOk = true;
+      try {
+        const p = await serverExport('png', { bundle: true });
+        const zip = await window.JSZip.loadAsync(z.bytes); zip.file(p.name, p.bytes);
+        bytes = await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' });
+      } catch (e) { if (e.status === 401 || e.code === 'suspended') throw e; pngOk = false; }
+      await saveFile(z.name, new Blob([bytes], { type: 'application/zip' }));
+      if (!pngOk) toast(T('savedNoPng', { name: z.name }));
+    } else {
+      const f = await serverExport(kind);
+      if ((kind === 'stl' || kind === 'dxf') && DLMODE === 'claude') {
+        const zip = new window.JSZip(); zip.file(f.name, f.bytes);
+        await saveFile(f.name + '.zip', new Blob([await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' })], { type: 'application/zip' }));
+      } else await saveFile(f.name, new Blob([f.bytes]));
     }
-    const f = await buildFile(kind);
-    if ((kind === 'stl' || kind === 'dxf') && DLMODE === 'claude') {
-      const zip = new window.JSZip(); zip.file(f.name, f.data);
-      await saveFile(f.name + '.zip', new Blob([await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' })], { type: 'application/zip' })); return;
-    }
-    await saveFile(f.name, f.data);
-  } catch (e) { toast(T('dlFail', { name: kind.toUpperCase(), msg: e && e.message ? e.message : 'error' })); }
+    renderAccount();
+  } catch (e) { exportError(e); }
+  finally { busy = false; setBusy(false); }
+}
+async function adminSaveRules() {
+  const { data } = await sb.auth.getSession(); const session = data && data.session;
+  if (!session || !account.isAdmin) return;
+  try {
+    const r = await fetch(CFG.supabaseUrl + '/functions/v1/admin', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: CFG.supabasePublishableKey, Authorization: 'Bearer ' + session.access_token },
+      body: JSON.stringify({ action: 'set_rules', rules: RULES, confirmed: CONF }) });
+    const b = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(b.error || r.status);
+    RULES = Core.normalizeRules(b.rules); CONF = b.confirmed || {}; renderRules(); renderStatic(); schedule(); toast(T('rulesSaved'));
+  } catch (e) { toast(T('rulesSaveFailed', { msg: e.message })); }
 }
 
 /* ---------------- 3D view (same triangles as the STL) ---------------- */
@@ -810,8 +896,11 @@ function renderRules() {
   const unit = k => k === 'tipFactor' ? '×' : T('mm');
   $('#rulesBody').innerHTML = Core.RULE_GROUPS.map(([g, keys]) => `<h3>${esc(T('rg_' + g))}</h3>` + keys.map(k => {
     const v = Array.isArray(RULES[k]) ? RULES[k].join(', ') : RULES[k];
-    return `<div class="rule"><label for="rule-${k}">${esc(T('r_' + k))}</label><div class="inwrap"><input id="rule-${k}" data-rule="${k}" value="${esc(v)}" inputmode="decimal"><span class="unit">${esc(unit(k))}</span></div><label class="cf"><input type="checkbox" data-conf="${k}" ${CONF[k] ? 'checked' : ''}>${esc(T('confirmed'))}</label></div>`;
+    const ro = account.isAdmin ? '' : ' disabled';
+    return `<div class="rule"><label for="rule-${k}">${esc(T('r_' + k))}</label><div class="inwrap"><input id="rule-${k}" data-rule="${k}" value="${esc(v)}" inputmode="decimal"${ro}><span class="unit">${esc(unit(k))}</span></div><label class="cf"><input type="checkbox" data-conf="${k}" ${CONF[k] ? 'checked' : ''}${ro}>${esc(T('confirmed'))}</label></div>`;
   }).join('')).join('');
+  $('#rulesNote').textContent = account.isAdmin ? '' : T('rulesReadOnly'); $('#rulesNote').hidden = account.isAdmin;
+  $('#rulesSave').hidden = !account.isAdmin; $('#rulesReset').hidden = !account.isAdmin;
 }
 function setRule(k, raw) {
   if (k === 'thicknesses') {
@@ -861,6 +950,8 @@ document.addEventListener('click', e => {
   if (d.u) { UI.units = d.u; Object.keys(parseErr).forEach(k => { if (k !== 'qty') delete parseErr[k]; }); renderStatic(); fillFields(); lastApproveSig = ''; schedule(); return; }
   if (d.view) { UI.view = d.view; renderStatic(); if (d.view === '3d') V3.update(); if (d.view === 'drawing') renderDrawing(); persist(); return; }
   if (d.dl) { download(d.dl); return; }
+  if (d.signin) { signIn(); return; }
+  if (d.signout) { signOut(); return; }
   switch (t.id) {
     case 'prevBtn': goStep(UI.step - 1); break;
     case 'nextBtn': goStep(UI.step + 1); break;
@@ -874,7 +965,8 @@ document.addEventListener('click', e => {
     case 'zoomBtn': zoomed = !zoomed; $('#sheet').classList.toggle('zoom', zoomed); t.textContent = zoomed ? T('fit') : T('zoom'); break;
     case 'btnRules': renderRules(); $('#rulesDlg').showModal(); break;
     case 'rulesClose': $('#rulesDlg').close(); break;
-    case 'rulesReset': RULES = JSON.parse(JSON.stringify(Core.DEFAULT_RULES)); CONF = {}; if (!RULES.thicknesses.includes(P.t)) P.t = 12; renderRules(); renderStatic(); schedule(); break;
+    case 'rulesSave': adminSaveRules(); break;
+    case 'rulesReset': if (!account.isAdmin) break; RULES = Core.normalizeRules({}); CONF = {}; if (!RULES.thicknesses.includes(P.t)) P.t = 12; renderRules(); renderStatic(); schedule(); break;
     case 'resetBtn':
       if (t.dataset.armed) {
         P = Core.defaultParams(); approval = null; logoImg = logoPng = logoFrost = null; logoHash = '';
@@ -914,6 +1006,7 @@ document.addEventListener('change', e => {
   if (el.id === 'phoneToggle') { UI.phone = el.checked; renderFront(); persist(); return; }
   if (el.id === 'logoFile') { const f = el.files && el.files[0]; if (f) takeLogo(f); el.value = ''; return; }
   if (d.chk) { checks[d.chk] = el.checked; const btn = $('#approveBtn'); if (btn) btn.disabled = !(model && !model.errors.length && !Object.keys(parseErr).length && checks.spell && checks.size && (!model.warnings.length || checks.warn)); lastApproveSig = ''; return; }
+  if ((d.rule || d.conf) && !account.isAdmin) { renderRules(); return; }
   if (d.rule) { if (!setRule(d.rule, el.value)) { toast(T('ruleBad')); renderRules(); return; } renderStatic(); schedule(); persist(); return; }
   if (d.conf) { CONF[d.conf] = el.checked; renderStatic(); persist(); lastApproveSig = ''; if (UI.view === 'drawing') renderDrawing(); return; }
 });
@@ -936,4 +1029,14 @@ if (P.logo && P.logo.dataUrl) {
 }
 if (!UI.seen.includes(UI.step)) UI.seen.push(UI.step);
 applyLang();
+renderAccount();
+if (sb) {
+  const authErr = authUrlError();
+  if (authErr) toast(/banned/i.test(authErr) ? T('suspendedSignin') : T('signInFailed', { msg: authErr }));
+  sb.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') setTimeout(() => { cleanAuthUrl(); loadAccount(); }, 0);
+  });
+  loadAccount().then(cleanAuthUrl);
+  loadRules();
+}
 })();

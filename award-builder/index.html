@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<noscript><p style="padding:20px;font:16px sans-serif">Award Builder needs JavaScript. Please enable it and reload. / يحتاج مصمم الدروع إلى تفعيل JavaScript.</p></noscript>
+<noscript><p style="padding:20px;font:16px sans-serif">Award Builder needs JavaScript. / يحتاج مصمم الدروع إلى تفعيل JavaScript.</p></noscript>
 <div class="page">
 <header class="top">
   <div class="brand">
@@ -17,6 +17,7 @@
     <div><h1 data-t="appTitle">Award Builder</h1><p data-t="appSub"></p></div>
   </div>
   <div class="top-actions">
+    <div id="account" class="account" aria-live="polite"></div>
     <button class="btn quiet small" id="btnRules"><span data-t="rulesBtn">Manufacturer rules</span><span class="pending-pill" id="pendingPill"></span></button>
     <button class="btn small" id="btnLang" lang="ar">عربي</button>
   </div>
@@ -147,18 +148,19 @@
 
 <dialog id="rulesDlg" aria-labelledby="rulesTitle">
   <div class="dlg">
-    <div class="dlg-head"><h2 id="rulesTitle" data-t="rulesTitle"></h2><p data-t="rulesLede"></p></div>
+    <div class="dlg-head"><h2 id="rulesTitle" data-t="rulesTitle"></h2><p data-t="rulesLede"></p><p class="notice warn" id="rulesNote" hidden></p></div>
     <div class="dlg-body" id="rulesBody"></div>
-    <div class="dlg-foot"><button type="button" class="btn quiet" id="rulesReset" data-t="rulesReset"></button><button type="button" class="btn primary" id="rulesClose" data-t="close"></button></div>
+    <div class="dlg-foot"><button type="button" class="btn quiet" id="rulesReset" data-t="rulesReset" hidden></button><span style="flex:1"></span><button type="button" class="btn" id="rulesClose" data-t="close"></button><button type="button" class="btn primary" id="rulesSave" data-t="rulesSave" hidden></button></div>
   </div>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="vendor/opentype.min.js"></script>
 <script src="vendor/earcut.min.js"></script>
-<script src="vendor/jspdf.umd.min.js"></script>
 <script src="vendor/jszip.min.js"></script>
 <script src="vendor/three.min.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="js/config.js"></script>
 <script src="js/core.js"></script>
 <script src="assets/fonts.js"></script>
 <script src="js/app.js"></script>

@@ -5,7 +5,7 @@
 const Core = {};
 const deps = { opentype: root.opentype, earcut: root.earcut };
 Core.setDeps = d => Object.assign(deps, d);
-Core.VERSION = '0.2.0';
+Core.VERSION = '0.3.0';
 
 /* ---------------- Manufacturing rules (prototype defaults, all pending confirmation) ---------------- */
 Core.DEFAULT_RULES = {
@@ -23,6 +23,17 @@ Core.RULE_GROUPS = [
   ['base', ['slotDepth', 'clrT', 'clrL', 'pocketGap', 'toolR', 'shoulder', 'minTab', 'minFloor', 'minWall', 'baseHMin', 'baseHMax', 'tipFactor', 'freeMinT']],
   ['tolerance', ['tolPlaque', 'tolBase', 'curveTol']]
 ];
+// Canonical, validated rule set (same key order everywhere, so reference IDs match between browser and server).
+Core.normalizeRules = function (r) {
+  const D = Core.DEFAULT_RULES, out = {};
+  for (const k of Object.keys(D)) {
+    const v = r && r[k];
+    if (k === 'thicknesses') out[k] = Array.isArray(v) && v.length && v.every(x => typeof x === 'number' && x > 0 && x <= 100) ? [...new Set(v)].sort((a, b) => a - b) : D[k].slice();
+    else out[k] = (typeof v === 'number' && isFinite(v) && v >= 0 && v <= 2000) ? v : D[k];
+  }
+  const bad = out.plaqueWMin >= out.plaqueWMax || out.plaqueHMin >= out.plaqueHMax || out.baseHMin >= out.baseHMax || out.curveTol <= 0 || out.curveTol > 1 || out.tipFactor > 1;
+  return bad ? JSON.parse(JSON.stringify(D)) : out;
+};
 Core.SHAPES = ['rectangle', 'arch', 'shield', 'flame'];
 // Customer size presets: plaque width x plaque height ABOVE the base (mm). Clamped to the active rules.
 Core.SIZE_PRESETS = { small: { W: 120, H: 160 }, medium: { W: 150, H: 200 }, large: { W: 200, H: 260 } };
@@ -508,64 +519,6 @@ Core.pocketOutline = function (M) { // CCW rounded rectangle in base XY plane
   return dedupe(pts);
 };
 
-/* ---------------- STL (binary, mm) ---------------- */
-Core.stl = function (M, ref) {
-  const ms = Core.meshes(M), parts = [ms.plaque, ms.base].filter(Boolean);
-  const nTri = parts.reduce((a, p) => a + p.length / 9, 0);
-  const buf = new ArrayBuffer(84 + nTri * 50), dv = new DataView(buf);
-  const head = `Acrylic award ${ref || ''} units=mm (plaque + base, assembled)`.slice(0, 80);
-  for (let i = 0; i < head.length; i++) dv.setUint8(i, head.charCodeAt(i) & 0x7f);
-  dv.setUint32(80, nTri, true);
-  let o = 84;
-  for (const p of parts) for (let i = 0; i < p.length; i += 9) {
-    const ux = p[i + 3] - p[i], uy = p[i + 4] - p[i + 1], uz = p[i + 5] - p[i + 2], vx = p[i + 6] - p[i], vy = p[i + 7] - p[i + 1], vz = p[i + 8] - p[i + 2];
-    let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const l = Math.hypot(nx, ny, nz) || 1; nx /= l; ny /= l; nz /= l;
-    dv.setFloat32(o, nx, true); dv.setFloat32(o + 4, ny, true); dv.setFloat32(o + 8, nz, true); o += 12;
-    for (let k = 0; k < 9; k++) { dv.setFloat32(o, p[i + k], true); o += 4; }
-    dv.setUint16(o, 0, true); o += 2;
-  }
-  return buf;
-};
-
-/* ---------------- DXF (R12 ASCII, mm, 1:1 cutting outlines) ---------------- */
-Core.dxfLayers = function (M) {
-  const d = v => fmt(v).replace('.', '_');
-  return { plaque: `PLAQUE_CUT_T${d(M.t)}MM`, base: M.base ? `BASE_OUTLINE_H${d(M.base.H)}MM` : null, pocket: M.pocket ? `BASE_POCKET_DEPTH_${d(M.pocket.D)}MM` : null };
-};
-Core.dxf = function (M) {
-  const lay = Core.dxfLayers(M), out = [];
-  const g = (c, v) => out.push(String(c), String(v));
-  const polys = [];
-  const pbb = bbox(M.cut), ox = -pbb.x0, oy = -pbb.y0;
-  polys.push({ layer: lay.plaque, pts: M.cut.map(p => [p[0] + ox, p[1] + oy]) });
-  if (M.base) {
-    const bx = pbb.x1 - pbb.x0 + 25 + M.base.W / 2, by = M.base.D / 2;
-    const { W, D } = M.base;
-    polys.push({ layer: lay.base, pts: [[-W / 2, -D / 2], [W / 2, -D / 2], [W / 2, D / 2], [-W / 2, D / 2]].map(p => [p[0] + bx, p[1] + by]) });
-    if (M.pocket) polys.push({ layer: lay.pocket, pts: Core.pocketOutline(M).map(p => [p[0] + bx, p[1] + by]) });
-  }
-  const all = bbox(polys.flatMap(p => p.pts));
-  g(0, 'SECTION'); g(2, 'HEADER');
-  g(9, '$ACADVER'); g(1, 'AC1009'); g(9, '$INSUNITS'); g(70, 4); g(9, '$MEASUREMENT'); g(70, 1);
-  g(9, '$EXTMIN'); g(10, all.x0.toFixed(4)); g(20, all.y0.toFixed(4)); g(30, 0);
-  g(9, '$EXTMAX'); g(10, all.x1.toFixed(4)); g(20, all.y1.toFixed(4)); g(30, 0);
-  g(0, 'ENDSEC');
-  g(0, 'SECTION'); g(2, 'TABLES');
-  g(0, 'TABLE'); g(2, 'LTYPE'); g(70, 1); g(0, 'LTYPE'); g(2, 'CONTINUOUS'); g(70, 0); g(3, 'Solid line'); g(72, 65); g(73, 0); g(40, 0); g(0, 'ENDTAB');
-  const layers = [lay.plaque, lay.base, lay.pocket].filter(Boolean), colors = [1, 5, 3];
-  g(0, 'TABLE'); g(2, 'LAYER'); g(70, layers.length);
-  layers.forEach((l, i) => { g(0, 'LAYER'); g(2, l); g(70, 0); g(62, colors[i]); g(6, 'CONTINUOUS'); });
-  g(0, 'ENDTAB'); g(0, 'ENDSEC');
-  g(0, 'SECTION'); g(2, 'ENTITIES');
-  for (const p of polys) {
-    g(0, 'POLYLINE'); g(8, p.layer); g(66, 1); g(10, 0); g(20, 0); g(30, 0); g(70, 1);
-    for (const v of p.pts) { g(0, 'VERTEX'); g(8, p.layer); g(10, v[0].toFixed(4)); g(20, v[1].toFixed(4)); g(30, 0); }
-    g(0, 'SEQEND'); g(8, p.layer);
-  }
-  g(0, 'ENDSEC'); g(0, 'EOF');
-  return out.join('\r\n') + '\r\n';
-};
-
 /* ---------------- SVG path helpers ---------------- */
 function svgPathD(cmds, X, Y) {
   let d = ''; const n = v => (Math.round(v * 1000) / 1000);
@@ -582,29 +535,6 @@ function polyD(pts, X, Y, close = true) { const n = v => Math.round(v * 1000) / 
 Core.svgPathD = svgPathD; Core.polyD = polyD;
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 Core.esc = esc;
-
-/* ---------------- Artwork SVG (actual size; separate from geometry) ---------------- */
-// which: 'inscription' | 'logo' | 'combined'
-Core.artworkSVG = function (M, P, which, ref) {
-  const bb = M.vbb, Wd = bb.x1 - bb.x0, Hd = M.H;
-  const X = x => x - bb.x0, Y = y => Hd - y;
-  const back = M.finish.side === 'back';
-  const ink = M.finish.method === 'laser' ? '#000000' : M.finish.color;
-  const mirror = back ? ` transform="translate(${fmt(Wd)} 0) scale(-1 1)"` : '';
-  const L = (id, label, body, extra = '') => `<g id="${id}" inkscape:groupmode="layer" inkscape:label="${esc(label)}"${extra}>${body}</g>`;
-  let body = '';
-  body += L('reference-outline', 'Plaque outline - reference only, do not engrave or print', `<path d="${polyD(M.vis, X, Y)}" fill="none" stroke="#00A0FF" stroke-width="0.1"/>`);
-  if (which !== 'logo') {
-    const paths = M.art.items.map(it => `<path d="${svgPathD(it.cmds, X, Y)}" fill="${ink}" fill-rule="nonzero" data-role="${it.role}"/>`).join('');
-    body += L('inscription', 'Inscription (outlined text)', paths);
-  }
-  if (which !== 'inscription' && M.art.logo && P.logo) {
-    const lg = M.art.logo;
-    body += L('logo', 'Logo (placed at final size)', `<image x="${fmt(X(lg.x))}" y="${fmt(Y(lg.y + lg.h))}" width="${fmt(lg.w)}" height="${fmt(lg.h)}" preserveAspectRatio="none" href="${P.logo.dataUrl}" xlink:href="${P.logo.dataUrl}"/>`);
-  }
-  const title = `Award ${ref || ''} ${which} artwork - ${fmt(Wd)} x ${fmt(Hd)} mm, ${M.finish.method === 'laser' ? 'laser engraving' : 'UV print'}, ${back ? 'BACK surface (mirrored)' : 'front surface'}`;
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="${fmt(Wd)}mm" height="${fmt(Hd)}mm" viewBox="0 0 ${fmt(Wd)} ${fmt(Hd)}">\n<title>${esc(title)}</title>\n<g${mirror}>${body}</g>\n</svg>\n`;
-};
 
 /* ---------------- Engineering drawing as primitives (A3 landscape, mm, y down) ---------------- */
 Core.SCALES = [[1, '1:1'], [0.5, '1:2'], [0.4, '1:2.5'], [0.25, '1:4'], [0.2, '1:5'], [0.1, '1:10']];
@@ -798,35 +728,6 @@ Core.drawingToSVG = function (S, fontFamily) {
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S.w} ${S.h}" width="${S.w}mm" height="${S.h}mm"><rect width="${S.w}" height="${S.h}" fill="#fff"/>${under.join('')}${over.join('')}</svg>`;
 };
-Core.drawingToPDF = function (S, jsPDF) {
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a3', compress: true });
-  const hex = c => { const v = parseInt(c.slice(1), 16); return [(v >> 16) & 255, (v >> 8) & 255, v & 255]; };
-  const order = S.prims.filter(p => p.under).concat(S.prims.filter(p => !p.under));
-  for (const p of order) {
-    if (p.k === 'line' || p.k === 'poly' || p.k === 'circle') {
-      doc.setLineWidth(p.w); doc.setDrawColor(...hex(p.c || '#000000')); doc.setLineDashPattern(p.dash || [], 0);
-      if (p.k === 'line') doc.line(p.x1, p.y1, p.x2, p.y2);
-      else if (p.k === 'circle') doc.circle(p.x, p.y, p.r, 'S');
-      else { doc.moveTo(p.pts[0][0], p.pts[0][1]); for (let i = 1; i < p.pts.length; i++) doc.lineTo(p.pts[i][0], p.pts[i][1]); if (p.closed) doc.close(); doc.stroke(); }
-      doc.setLineDashPattern([], 0);
-    } else if (p.k === 'path') {
-      doc.setFillColor(...hex(p.fill));
-      for (const sub of p.subs) { doc.moveTo(sub[0][0], sub[0][1]); for (let i = 1; i < sub.length; i++) doc.lineTo(sub[i][0], sub[i][1]); doc.close(); }
-      doc.fill();
-    } else if (p.k === 'image') {
-      try { doc.addImage(p.src, 'PNG', p.x, p.y, p.w, p.h); } catch (e) { /* logo skipped */ }
-    } else if (p.k === 'text') {
-      doc.setFont('helvetica', p.bold ? 'bold' : 'normal'); doc.setFontSize(p.s / 0.3528); doc.setTextColor(...hex(p.c));
-      if (p.rot) {
-        const w = doc.getTextWidth(p.txt), a = -p.rot * Math.PI / 180;
-        const off = p.a === 'middle' ? w / 2 : p.a === 'end' ? w : 0;
-        doc.text(p.txt, p.x - off * Math.cos(a), p.y + off * Math.sin(a), { angle: -p.rot });
-      } else doc.text(p.txt, p.x, p.y, { align: p.a === 'middle' ? 'center' : p.a === 'end' ? 'right' : 'left' });
-    }
-  }
-  return doc;
-};
-
 /* ---------------- Customer preview (front view, SVG string) ---------------- */
 Core.previewSVG = function (M, P, opt) {
   opt = opt || {};
@@ -904,25 +805,6 @@ Core.previewSVG = function (M, P, opt) {
   s += lab((M.vbb.x0 + M.vbb.x1) / 2, yW + span * 0.012, L.width + ' ' + L.unit(M.vbb.x1 - M.vbb.x0), 'strong', 'middle');
   s += '</svg>';
   return s;
-};
-
-/* ---------------- Spec (single source of truth record) ---------------- */
-Core.spec = function (M, P, R, extra) {
-  const p = JSON.parse(JSON.stringify(P)); if (p.logo) p.logo = { name: p.logo.name, mime: p.logo.mime, pxW: p.logo.pxW, pxH: p.logo.pxH, svg: !!p.logo.svg };
-  return Object.assign({
-    generator: 'acrylic-award-configurator', version: Core.VERSION, units: 'mm',
-    parameters: p, rules: R,
-    derived: {
-      plaqueWidthMax: +fmt(M.vbb.x1 - M.vbb.x0), plaqueHeightAboveBase: M.H, totalHeight: M.Ht, thickness: M.t,
-      bottomContactWidth: +fmt(2 * M.b), plaqueCutHeight: +fmt(M.H + (M.tab ? M.tab.d : 0)),
-      tab: M.tab ? { width: +fmt(M.tab.w), depth: M.tab.d, shoulder: +fmt(M.tab.shoulder) } : null,
-      base: M.base ? { width: M.base.W, depth: M.base.D, height: M.base.H, material: M.base.material } : null,
-      pocket: M.pocket ? { length: +fmt(M.pocket.L), width: +fmt(M.pocket.W), depth: +fmt(M.pocket.D), cornerRadius: +fmt(M.pocket.r) } : null,
-      artwork: { items: M.art.items.map(i => ({ role: i.role, text: i.text, size: +fmt(i.size), bbox: [+fmt(i.ink.x0), +fmt(i.ink.y0), +fmt(i.ink.x1), +fmt(i.ink.y1)] })), logo: M.art.logo ? { x: +fmt(M.art.logo.x), y: +fmt(M.art.logo.y), w: +fmt(M.art.logo.w), h: +fmt(M.art.logo.h) } : null },
-      dxfLayers: Core.dxfLayers(M)
-    },
-    warnings: M.warnings.map(w => w.code)
-  }, extra || {});
 };
 
 root.AwardCore = Core;
