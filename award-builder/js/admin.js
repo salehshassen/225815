@@ -8,7 +8,7 @@ const CFG = window.AWARD_CONFIG || {};
 // Safety net: a secret/service key must never be published. If one is pasted into js/config.js, refuse to use it.
 const KEY_IS_SECRET = (() => { const k = String(CFG.supabasePublishableKey || ''); if (/^sb_secret_/i.test(k)) return true;
   try { return JSON.parse(atob(k.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).role === 'service_role'; } catch (e) { return false; } })();
-if (KEY_IS_SECRET) console.error('Award Builder: js/config.js contains a SECRET key. Remove it, rotate it in Supabase, and use the publishable key.');
+if (KEY_IS_SECRET) console.error('Jaiza Studios: js/config.js contains a SECRET key. Remove it, rotate it in Supabase, and use the publishable key.');
 const CONFIGURED = !KEY_IS_SECRET && !!(window.supabase && CFG.supabaseUrl && CFG.supabasePublishableKey && !/YOUR-PROJECT|REPLACE/i.test(CFG.supabaseUrl + CFG.supabasePublishableKey));
 const sb = CONFIGURED ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabasePublishableKey, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'aw-auth' } }) : null;
 const S = { q: '', offset: 0, limit: 50, total: 0, users: [], plans: [], me: null, busy: false };

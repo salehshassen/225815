@@ -11,7 +11,9 @@ const store = {
 /* ---------------- strings ---------------- */
 const STR = {
 en: {
-  appTitle: 'Award Builder', appSub: 'Design an acrylic award and get files your manufacturer can cut.',
+  manufacturingNotice: 'Jaiza Studios provides automated design previews and files that may contain errors and are not certified engineering drawings. Before production, a qualified manufacturer must verify dimensions, materials, tolerances, fit, stability, artwork and suitability for the intended use. Screen previews may differ from the finished product. You must have permission to use submitted text, logos and artwork. Nothing in this notice excludes rights or liabilities that cannot lawfully be excluded.',
+  chkManufacturing: 'I understand that these files require manufacturer verification before production, have permission to use my submitted content, and agree to the Terms of Service.',
+  appTitle: 'Jaiza Studios', appSub: 'Design custom acrylic awards. Preview freely; sign in to download files for manufacturer review.',
   rulesBtn: 'Manufacturer rules', langBtn: 'عربي',
   signIn: 'Continue with Google', signOut: 'Sign out', adminLink: 'Admin', planLabel: '{name} plan', exportsLabel: 'Exports: {n}',
   suspendedBadge: 'Suspended', signInToDownload: 'Sign in with Google to download the manufacturing files. Designing and previewing work without an account.',
@@ -127,7 +129,9 @@ en: {
   fatal: 'The design engine couldn’t load because a required library was blocked. Reload the page to try again.'
 },
 ar: {
-  appTitle: 'مصمم الدروع', appSub: 'صمّم درعا من الأكريليك واحصل على ملفات جاهزة للتصنيع.',
+  manufacturingNotice: 'تقدم جائزة ستوديوز معاينات وملفات تصميم آلية قد تتضمن أخطاء، ولا تعد رسومات هندسية معتمدة. قبل الإنتاج، يجب على جهة تصنيع مؤهلة التحقق من الأبعاد والمواد والتفاوتات والتوافق والثبات والمحتوى وملاءمة الاستخدام. قد تختلف معاينة الشاشة عن المنتج النهائي. يجب أن تملك حق استخدام النصوص والشعارات والأعمال المرفوعة. لا يستبعد هذا التنبيه أي حقوق أو مسؤوليات لا يجوز استبعادها نظاماً.',
+  chkManufacturing: 'أفهم أن الملفات تتطلب مراجعة جهة التصنيع قبل الإنتاج، وأملك حق استخدام المحتوى المقدم، وأوافق على شروط الخدمة.',
+  appTitle: 'جائزة ستوديوز', appSub: 'صمّم درعاً من الأكريليك وعاينه مجاناً، وسجّل الدخول لتنزيل ملفات لمراجعة جهة التصنيع.',
   rulesBtn: 'قواعد المصنع', langBtn: 'English',
   signIn: 'المتابعة باستخدام Google', signOut: 'تسجيل الخروج', adminLink: 'لوحة الإدارة', planLabel: 'الخطة: {name}', exportsLabel: 'التنزيلات: {n}',
   suspendedBadge: 'موقوف', signInToDownload: 'سجّل الدخول باستخدام Google لتنزيل ملفات التصنيع. التصميم والمعاينة متاحان دون حساب.',
@@ -262,7 +266,7 @@ const uiStored = store.get('aw.ui');
 const UI = merge({ lang: 'en', units: 'cm', step: 1, seen: [1], view: 'front', phone: true, v: 2 }, uiStored);
 if (!uiStored || uiStored.v !== 2) { UI.units = 'cm'; UI.phone = true; UI.v = 2; }
 let approval = store.get('aw.approval');
-const checks = { spell: false, size: false, warn: false };
+const checks = { spell: false, size: false, warn: false, manufacturing: false };
 const parseErr = {};
 let model = null, logoImg = null, logoPng = null, logoFrost = null, logoHash = '', logoTooBig = false, zoomed = false;
 
@@ -283,7 +287,7 @@ function designHash() {
   const p = Object.assign({}, P, { logo: P.logo ? { h: logoHash, n: P.logo.name } : null }); delete p.sizePreset;
   return Core.hash(JSON.stringify(p) + '|' + JSON.stringify(RULES));
 }
-const approvedValid = () => !!(approval && approval.hash === designHash());
+const approvedValid = () => !!(approval && approval.noticeVersion === '2026-10-15' && approval.hash === designHash());
 const fmtDateEn = d => { const z = n => String(n).padStart(2, '0'); d = new Date(d); return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; };
 const fmtDateUi = d => { try { return new Date(d).toLocaleString(UI.lang === 'ar' ? 'ar-SA-u-nu-latn-ca-gregory' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' }); } catch (e) { return fmtDateEn(d); } };
 
@@ -427,7 +431,7 @@ function applyLang() {
   html.lang = UI.lang; html.dir = UI.lang === 'ar' ? 'rtl' : 'ltr';
   document.querySelectorAll('[data-t]').forEach(el => { el.textContent = T(el.dataset.t); });
   const lb = $('#btnLang'); lb.textContent = T('langBtn'); lb.lang = UI.lang === 'ar' ? 'en' : 'ar';
-  document.title = UI.lang === 'ar' ? 'مصمم الدروع: دروع أكريليك تكريمية' : 'Award Builder: acrylic recognition awards';
+  document.title = UI.lang === 'ar' ? 'جائزة ستوديوز | Jaiza Studios — تصميم دروع الأكريليك' : 'Jaiza Studios — Custom Acrylic Award Designer';
   renderStatic(); refreshLogoUI(); fillFields(); lastApproveSig = ''; schedule();
   if (typeof renderAccount === 'function' && typeof account !== 'undefined') renderAccount();
   if ($('#rulesDlg').open) renderRules();
@@ -590,7 +594,7 @@ function renderApprove(force) {
   if (!model) return;
   const valid = approvedValid();
   const errs = model.errors, warns = model.warnings, bad = Object.keys(parseErr).length > 0;
-  const sig = [UI.lang, valid, approval && approval.stale, errs.map(msgText).join('|'), warns.map(msgText).join('|'), bad, model.Ht, UI.units, DLMODE, checks.spell, checks.size, checks.warn, !!sb, account.loading, account.session ? account.session.user.id : '', account.profile ? account.profile.status : '', account.ipBlocked].join('#');
+  const sig = [UI.lang, valid, approval && approval.stale, errs.map(msgText).join('|'), warns.map(msgText).join('|'), bad, model.Ht, UI.units, DLMODE, checks.spell, checks.size, checks.warn, checks.manufacturing, !!sb, account.loading, account.session ? account.session.user.id : '', account.profile ? account.profile.status : '', account.ipBlocked].join('#');
   if (!force && sig === lastApproveSig) return;
   lastApproveSig = sig;
   const area = $('#approveArea');
@@ -607,6 +611,7 @@ function renderApprove(force) {
     const item = (k, label) => `<button type="button" class="btn" data-dl="${k}">${esc(label)}${zipNote && (k === 'stl' || k === 'dxf') ? ` <small>(${esc(T('inZip'))})</small>` : ''}</button>`;
     area.innerHTML = `<div class="seal"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 17.5l4.5 4.5L24 12.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>${esc(T('approvedH'))}</strong><span class="small">${esc(T('approvedMeta', { ref: approval.ref, at: fmtDateUi(approval.at) }))}</span></div></div>
       ${DLMODE === 'none' ? `<div class="notice warn">${esc(T('dlUnavailable'))}</div>` : ''}
+      <p class="notice">${esc(T('manufacturingNotice'))}</p>
       <h3>${esc(T('dlH'))}</h3>
       <button type="button" class="btn primary dl-main" data-dl="zip" ${DLMODE === 'none' ? 'disabled' : ''}>${esc(T('dlPkg'))}</button>
       <p class="small">${esc(T('dlPkgD'))}</p>
@@ -617,21 +622,21 @@ function renderApprove(force) {
       ${edit}`;
     return;
   }
-  let h = '';
+  let h = `<div class="notice warn">${esc(T('manufacturingNotice'))} <a href="terms.html#manufacturing" target="_blank" rel="noopener">${esc(T('legalTerms'))}</a></div><label class="check"><input type="checkbox" data-chk="manufacturing" ${checks.manufacturing ? 'checked' : ''}><span>${esc(T('chkManufacturing'))}</span></label>`;
   if (approval && approval.stale) h += `<div class="notice warn">${esc(T('changed'))}</div>`;
   if (errs.length || bad) h += `<div class="notice err">${esc(T('blocked'))}</div><ul class="msglist">${errs.map(m => `<li class="error">${esc(msgText(m))}</li>`).join('')}${bad ? `<li class="error">${esc(T(parseErr.qty ? 'F_QTY' : 'F_NUM'))}</li>` : ''}</ul>`;
   if (warns.length) h += `<ul class="msglist">${warns.map(m => `<li class="warn">${esc(msgText(m))}</li>`).join('')}</ul>`;
   h += `<label class="check"><input type="checkbox" data-chk="spell" ${checks.spell ? 'checked' : ''}><span>${esc(T('chkSpell'))}</span></label>`;
   h += `<label class="check"><input type="checkbox" data-chk="size" ${checks.size ? 'checked' : ''}><span>${esc(T('chkSize', { total: lenTxt(model.Ht) }))}</span></label>`;
   if (warns.length) h += `<label class="check"><input type="checkbox" data-chk="warn" ${checks.warn ? 'checked' : ''}><span>${esc(T('chkWarn'))}</span></label>`;
-  const can = !errs.length && !bad && checks.spell && checks.size && (!warns.length || checks.warn);
+  const can = !errs.length && !bad && checks.manufacturing && checks.spell && checks.size && (!warns.length || checks.warn);
   h += `<button type="button" class="btn primary dl-main" id="approveBtn" ${can ? '' : 'disabled'}>${esc(T('approveBtn'))}</button>`;
   area.innerHTML = h;
 }
 function approve() {
-  if (!model || model.errors.length || Object.keys(parseErr).length) return;
+  if (!model || model.errors.length || Object.keys(parseErr).length || !checks.manufacturing || !checks.spell || !checks.size || (model.warnings.length && !checks.warn)) return;
   const h = designHash();
-  approval = { hash: h, ref: 'AW-' + h, at: new Date().toISOString() };
+  approval = { noticeVersion: '2026-10-15', hash: h, ref: 'AW-' + h, at: new Date().toISOString() };
   persist(); lastApproveSig = ''; renderApprove(true);
   if (UI.view === 'drawing') renderDrawing();
   toast(T('approvedToast'));
@@ -663,7 +668,7 @@ const CFG = window.AWARD_CONFIG || {};
 // Safety net: a secret/service key must never be published. If one is pasted into js/config.js, refuse to use it.
 const KEY_IS_SECRET = (() => { const k = String(CFG.supabasePublishableKey || ''); if (/^sb_secret_/i.test(k)) return true;
   try { return JSON.parse(atob(k.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).role === 'service_role'; } catch (e) { return false; } })();
-if (KEY_IS_SECRET) console.error('Award Builder: js/config.js contains a SECRET key. Remove it, rotate it in Supabase, and use the publishable key.');
+if (KEY_IS_SECRET) console.error('Jaiza Studios: js/config.js contains a SECRET key. Remove it, rotate it in Supabase, and use the publishable key.');
 const CONFIGURED = !KEY_IS_SECRET && !!(window.supabase && CFG.supabaseUrl && CFG.supabasePublishableKey && !/YOUR-PROJECT|REPLACE/i.test(CFG.supabaseUrl + CFG.supabasePublishableKey));
 const sb = CONFIGURED ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabasePublishableKey, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'aw-auth' } }) : null;
 const account = { session: null, profile: null, plans: {}, isAdmin: false, loading: CONFIGURED, ipBlocked: false };
@@ -1015,7 +1020,7 @@ document.addEventListener('change', e => {
   }
   if (el.id === 'phoneToggle') { UI.phone = el.checked; renderFront(); persist(); return; }
   if (el.id === 'logoFile') { const f = el.files && el.files[0]; if (f) takeLogo(f); el.value = ''; return; }
-  if (d.chk) { checks[d.chk] = el.checked; const btn = $('#approveBtn'); if (btn) btn.disabled = !(model && !model.errors.length && !Object.keys(parseErr).length && checks.spell && checks.size && (!model.warnings.length || checks.warn)); lastApproveSig = ''; return; }
+  if (d.chk) { checks[d.chk] = el.checked; const btn = $('#approveBtn'); if (btn) btn.disabled = !(model && !model.errors.length && !Object.keys(parseErr).length && checks.manufacturing && checks.spell && checks.size && (!model.warnings.length || checks.warn)); lastApproveSig = ''; return; }
   if ((d.rule || d.conf) && !account.isAdmin) { renderRules(); return; }
   if (d.rule) { if (!setRule(d.rule, el.value)) { toast(T('ruleBad')); renderRules(); return; } renderStatic(); schedule(); persist(); return; }
   if (d.conf) { CONF[d.conf] = el.checked; renderStatic(); persist(); lastApproveSig = ''; if (UI.view === 'drawing') renderDrawing(); return; }
