@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Award Builder: administration</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<noscript><p style="padding:20px">The admin dashboard needs JavaScript.</p></noscript>
+<div class="page">
+<header class="top">
+  <div class="brand">
+    <svg width="34" height="38" viewBox="0 0 34 38" aria-hidden="true"><path d="M6 30V12a11 11 0 0 1 22 0v18Z" fill="#9FE3E6" fill-opacity=".25" stroke="#0F6B5C" stroke-width="2"/><rect x="2" y="30" width="30" height="7" rx="1.5" fill="#18222D"/><path d="M11 16h12M13 20h8" stroke="#0F6B5C" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <div><h1>Award Builder administration</h1><p>Customers, plans and access</p></div>
+  </div>
+  <div class="top-actions"><span id="who" class="small"></span><a class="btn quiet small" href="./">Back to the builder</a><button type="button" class="btn small" id="signOut" hidden>Sign out</button></div>
+</header>
+<main class="adm">
+  <section id="gate" class="adm-gate" aria-live="polite"></section>
+  <section id="panel" hidden>
+    <div class="adm-bar">
+      <label class="adm-search"><span class="sr">Search customers</span><input type="search" id="q" class="txt" placeholder="Search by name or email" autocomplete="off"></label>
+      <span id="count" class="small"></span>
+      <span style="flex:1"></span>
+      <button type="button" class="btn" id="refresh">Refresh</button>
+      <button type="button" class="btn primary" id="csv">Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table class="users">
+        <thead><tr><th scope="col">Customer</th><th scope="col">Signed up</th><th scope="col">Last login</th><th scope="col">Plan</th><th scope="col">Status</th><th scope="col" class="num">Exports</th><th scope="col">Last export</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="pager"><button type="button" class="btn small" id="prev">Previous</button><span id="pageInfo" class="small"></span><button type="button" class="btn small" id="next">Next</button></div>
+    <p class="small adm-foot">Suspending takes effect on the server immediately, including for customers who are already signed in. Plan and status can only be changed here; customers cannot change their own. Every change is recorded in the audit table.</p>
+  </section>
+</main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="vendor/supabase.js"></script>
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
