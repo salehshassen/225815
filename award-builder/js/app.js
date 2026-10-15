@@ -16,6 +16,9 @@ en: {
   signIn: 'Continue with Google', signOut: 'Sign out', adminLink: 'Admin', planLabel: '{name} plan', exportsLabel: 'Exports: {n}',
   suspendedBadge: 'Suspended', signInToDownload: 'Sign in with Google to download the manufacturing files. Designing and previewing work without an account.',
   suspendedNotice: 'Your account is suspended, so files can’t be downloaded. Contact the administrator to restore access.',
+  ipBlocked: 'Downloads are blocked for the network you are using (its IP address). You can still sign in, design and preview. If you think this is a mistake, contact the administrator.',
+  ipUnknown: 'Downloads are unavailable right now because your network address could not be verified. Please try again later.',
+  legalPrivacy: 'Privacy Policy', legalTerms: 'Terms of Service', legalNote: 'By signing in you agree to the',
   suspendedSignin: 'This account is suspended and can’t sign in. Contact the administrator.', signInFailed: 'Sign-in failed: {msg}',
   sessionExpired: 'Your session has ended. Please sign in again.', limitReached: 'You’ve reached this month’s export limit for your plan.',
   serverRejected: 'The server rejected this design: {msg}', tooLarge: 'The design is too large to send (usually the logo). Use a logo under 4 MB.',
@@ -129,6 +132,9 @@ ar: {
   signIn: 'المتابعة باستخدام Google', signOut: 'تسجيل الخروج', adminLink: 'لوحة الإدارة', planLabel: 'الخطة: {name}', exportsLabel: 'التنزيلات: {n}',
   suspendedBadge: 'موقوف', signInToDownload: 'سجّل الدخول باستخدام Google لتنزيل ملفات التصنيع. التصميم والمعاينة متاحان دون حساب.',
   suspendedNotice: 'حسابك موقوف، لذا لا يمكن تنزيل الملفات. تواصل مع المسؤول لاستعادة الوصول.',
+  ipBlocked: 'التنزيل محظور على الشبكة التي تستخدمها (عنوان IP). يمكنك تسجيل الدخول والتصميم والمعاينة كالمعتاد. إذا كنت ترى أن هذا خطأ فتواصل مع المسؤول.',
+  ipUnknown: 'التنزيل غير متاح حاليا لتعذّر التحقق من عنوان شبكتك. حاول مرة أخرى لاحقا.',
+  legalPrivacy: 'سياسة الخصوصية', legalTerms: 'شروط الخدمة', legalNote: 'بتسجيل الدخول فإنك توافق على',
   suspendedSignin: 'هذا الحساب موقوف ولا يمكنه تسجيل الدخول. تواصل مع المسؤول.', signInFailed: 'تعذّر تسجيل الدخول: {msg}',
   sessionExpired: 'انتهت جلستك. سجّل الدخول مرة أخرى.', limitReached: 'وصلت إلى حد التنزيل الشهري في خطتك.',
   serverRejected: 'رفض الخادم هذا التصميم: {msg}', tooLarge: 'التصميم أكبر من المسموح للإرسال (غالبا بسبب الشعار). استخدم شعارا أقل من 4 ميجابايت.',
@@ -584,7 +590,7 @@ function renderApprove(force) {
   if (!model) return;
   const valid = approvedValid();
   const errs = model.errors, warns = model.warnings, bad = Object.keys(parseErr).length > 0;
-  const sig = [UI.lang, valid, approval && approval.stale, errs.map(msgText).join('|'), warns.map(msgText).join('|'), bad, model.Ht, UI.units, DLMODE, checks.spell, checks.size, checks.warn, !!sb, account.loading, account.session ? account.session.user.id : '', account.profile ? account.profile.status : ''].join('#');
+  const sig = [UI.lang, valid, approval && approval.stale, errs.map(msgText).join('|'), warns.map(msgText).join('|'), bad, model.Ht, UI.units, DLMODE, checks.spell, checks.size, checks.warn, !!sb, account.loading, account.session ? account.session.user.id : '', account.profile ? account.profile.status : '', account.ipBlocked].join('#');
   if (!force && sig === lastApproveSig) return;
   lastApproveSig = sig;
   const area = $('#approveArea');
@@ -595,7 +601,7 @@ function renderApprove(force) {
     let gate = '';
     if (!sb) gate = `<div class="notice warn">${esc(T('notConfigured'))}</div>`;
     else if (account.loading) gate = '<p class="small" aria-busy="true">…</p>';
-    else if (!account.session) gate = `<div class="notice">${esc(T('signInToDownload'))}</div><button type="button" class="btn primary dl-main gbtn" data-signin="1">${G_LOGO}<span>${esc(T('signIn'))}</span></button>`;
+    else if (!account.session) gate = `<div class="notice">${esc(T('signInToDownload'))}</div><button type="button" class="btn primary dl-main gbtn" data-signin="1">${G_LOGO}<span>${esc(T('signIn'))}</span></button><p class="small">${esc(T('legalNote'))} <a href="terms.html">${esc(T('legalTerms'))}</a>. <a href="privacy.html">${esc(T('legalPrivacy'))}</a></p>`;
     else if (account.profile && account.profile.status !== 'active') gate = `<div class="notice err">${esc(T('suspendedNotice'))}</div>`;
     if (gate) { area.innerHTML = seal + `<h3>${esc(T('dlH'))}</h3>` + gate + edit; return; }
     const item = (k, label) => `<button type="button" class="btn" data-dl="${k}">${esc(label)}${zipNote && (k === 'stl' || k === 'dxf') ? ` <small>(${esc(T('inZip'))})</small>` : ''}</button>`;
@@ -605,6 +611,7 @@ function renderApprove(force) {
       <button type="button" class="btn primary dl-main" data-dl="zip" ${DLMODE === 'none' ? 'disabled' : ''}>${esc(T('dlPkg'))}</button>
       <p class="small">${esc(T('dlPkgD'))}</p>
       <div class="dl-list">${item('pdf', T('dl_pdf'))}${item('stl', T('dl_stl'))}${item('dxf', T('dl_dxf'))}${item('ins', T('dl_ins'))}${P.logo ? item('logo', T('dl_logo')) : ''}${item('png', T('dl_png'))}${item('json', T('dl_json'))}</div>
+      ${account.ipBlocked ? `<div class="notice err" role="alert">${esc(T('ipBlocked'))}</div>` : ''}
       <p class="small">${esc(T('serverFilesNote', { email: account.session.user.email || '' }))}</p>
       ${zipNote ? `<p class="small">${esc(T('dlNoteZip'))}</p>` : ''}
       ${edit}`;
@@ -659,7 +666,7 @@ const KEY_IS_SECRET = (() => { const k = String(CFG.supabasePublishableKey || ''
 if (KEY_IS_SECRET) console.error('Award Builder: js/config.js contains a SECRET key. Remove it, rotate it in Supabase, and use the publishable key.');
 const CONFIGURED = !KEY_IS_SECRET && !!(window.supabase && CFG.supabaseUrl && CFG.supabasePublishableKey && !/YOUR-PROJECT|REPLACE/i.test(CFG.supabaseUrl + CFG.supabasePublishableKey));
 const sb = CONFIGURED ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabasePublishableKey, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'aw-auth' } }) : null;
-const account = { session: null, profile: null, plans: {}, isAdmin: false, loading: CONFIGURED };
+const account = { session: null, profile: null, plans: {}, isAdmin: false, loading: CONFIGURED, ipBlocked: false };
 let busy = false, lastAccountKey = '';
 function authUrlError() {
   const u = new URL(location.href), h = new URLSearchParams(u.hash.replace(/^#/, ''));
@@ -743,6 +750,8 @@ async function serverExport(kind, extra) {
 function exportError(e) {
   if (e.status === 401) { toast(T('sessionExpired')); signOut(); return; }
   if (e.code === 'suspended') { if (account.profile) account.profile.status = 'suspended'; renderAccount(); lastApproveSig = ''; renderApprove(true); toast(T('suspendedNotice')); return; }
+  if (e.code === 'ip_banned') { account.ipBlocked = true; lastApproveSig = ''; renderApprove(true); toast(T('ipBlocked')); return; }
+  if (e.code === 'ip_unknown') { toast(T('ipUnknown')); return; }
   if (e.code === 'limit_reached') { toast(T('limitReached')); return; }
   if (e.code === 'invalid_design') { toast(T('serverRejected', { msg: (e.details || []).map(d => msgText({ lv: 'error', code: d.code, vals: d.vals || {} })).join(' ') })); return; }
   if (e.code === 'too_large' || e.status === 413) { toast(T('tooLarge')); return; }
@@ -767,7 +776,7 @@ async function download(kind) {
         const p = await serverExport('png', { bundle: true });
         const zip = await window.JSZip.loadAsync(z.bytes); zip.file(p.name, p.bytes);
         bytes = await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' });
-      } catch (e) { if (e.status === 401 || e.code === 'suspended') throw e; pngOk = false; }
+      } catch (e) { if (e.status === 401 || e.code === 'suspended' || e.code === 'ip_banned' || e.code === 'ip_unknown') throw e; pngOk = false; }
       await saveFile(z.name, new Blob([bytes], { type: 'application/zip' }));
       if (!pngOk) toast(T('savedNoPng', { name: z.name }));
     } else {
@@ -777,6 +786,7 @@ async function download(kind) {
         await saveFile(f.name + '.zip', new Blob([await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' })], { type: 'application/zip' }));
       } else await saveFile(f.name, new Blob([f.bytes]));
     }
+    if (account.ipBlocked) { account.ipBlocked = false; lastApproveSig = ''; renderApprove(true); }
     renderAccount();
   } catch (e) { exportError(e); }
   finally { busy = false; setBusy(false); }

@@ -9,6 +9,8 @@ Setup steps: see **SETUP.md** (Parts A–F).
 - **On the server (requires Google sign-in and an active account):** every manufacturing file (PDF drawing, STL, DXF, artwork SVG/PNG,
   design record, ZIP package). The server validates the design against the administrator's rules, checks the account on every request,
   and logs each export. The code that writes these files is not in this folder.
+- `privacy.html`, `terms.html` and `google969a58c9264a531c.html` (Google ownership verification) must stay in this folder when you redeploy.
+- v0.4: the dashboard can block **downloads only** from specific IP addresses (see DEPLOY-IP-BANS.md); blocked visitors can still sign in and use previews.
 - `admin.html` is the administrator dashboard. Anyone can open the page, but all data comes from the server, which only answers the
   administrator account.
 

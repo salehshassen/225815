@@ -21,3 +21,35 @@ table.users{width:100%;border-collapse:collapse;font-size:14px;font-variant-nume
 .btn.danger{color:var(--err);border-color:var(--err-bg)}
 .pager{display:flex;gap:12px;align-items:center;justify-content:flex-end;margin-top:12px}
 .adm-foot{margin-top:16px;max-width:760px}
+.ip-section{margin-top:34px;padding-top:22px;border-top:1px solid var(--rule)}
+.ip-section h2{font-size:20px;margin-bottom:6px}
+.ip-note{max-width:860px;margin:0 0 16px;line-height:1.55}
+.ip-form{display:grid;grid-template-columns:minmax(200px,1fr) minmax(220px,1.4fr) auto;gap:12px;align-items:end;margin-bottom:12px}
+.ip-actions{display:flex;gap:8px}
+.ip-check{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.ip-check p{margin:0;max-width:780px}
+.ip-check .ok{color:var(--go);font-weight:600}
+.ip-check .bad{color:var(--err);font-weight:600}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-wrap:anywhere}
+.ipcell{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+/* Small screens: tables become cards so every control stays visible without sideways scrolling */
+@media (max-width:760px){
+  .adm{padding:14px}
+  .top-actions{flex-wrap:wrap}
+  .ip-form{grid-template-columns:1fr}
+  .ip-actions .btn{flex:1;min-height:44px}
+  .adm-bar>*{flex:1 1 100%;max-width:none}
+  .ip-filter select{width:100%;min-height:40px}
+  .table-wrap{border:0;background:transparent;overflow:visible}
+  table.users thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.users,table.users tbody,table.users tr,table.users td{display:block;width:100%}
+  table.users tr{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+  table.users td{display:flex;justify-content:space-between;gap:12px;align-items:center;border:0;padding:5px 0;white-space:normal;text-align:end}
+  table.users td::before{content:attr(data-label);color:var(--muted);font-size:12.5px;font-weight:600;text-align:start;flex:none}
+  table.users td.cust,table.users td.act{display:block;text-align:start}
+  table.users td.cust::before,table.users td.act::before{display:none}
+  table.users td.act .btn{width:100%;min-height:44px;margin-top:6px}
+  .users .num{text-align:end}
+  .plan-sel{max-width:60%}
+  .pager{justify-content:space-between}
+}

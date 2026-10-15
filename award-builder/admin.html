@@ -31,14 +31,38 @@
     </div>
     <div class="table-wrap">
       <table class="users">
-        <thead><tr><th scope="col">Customer</th><th scope="col">Signed up</th><th scope="col">Last login</th><th scope="col">Plan</th><th scope="col">Status</th><th scope="col" class="num">Exports</th><th scope="col">Last export</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>
+        <thead><tr><th scope="col">Customer</th><th scope="col">Signed up</th><th scope="col">Last login</th><th scope="col">Plan</th><th scope="col">Status</th><th scope="col" class="num">Exports</th><th scope="col">Last export</th><th scope="col">Last download IP</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
     <div class="pager"><button type="button" class="btn small" id="prev">Previous</button><span id="pageInfo" class="small"></span><button type="button" class="btn small" id="next">Next</button></div>
     <p class="small adm-foot">Suspending takes effect on the server immediately, including for customers who are already signed in. Plan and status can only be changed here; customers cannot change their own. Every change is recorded in the audit table.</p>
+
+    <section class="ip-section" aria-labelledby="ipTitle">
+      <h2 id="ipTitle">Download blocks by IP address</h2>
+      <p class="small ip-note">A block stops <strong>manufacturing-file downloads only</strong> from one IPv4 or IPv6 address, for every account using it, including people already signed in. They can still open the site, sign in and use previews. <strong>Shared networks:</strong> offices, schools, cafés and mobile carriers can put many customers behind one address, so a block can affect people you did not intend. <strong>Changing networks:</strong> someone who switches connection (mobile data, another Wi-Fi, a VPN) gets a different address, so an IP block alone cannot stop a determined person; suspend the account too. Restoring an IP never lifts an account suspension or a plan limit.</p>
+      <form class="ip-form" id="ipForm" autocomplete="off" novalidate>
+        <label class="field"><span class="flabel">IP address</span><input id="ipInput" class="txt" spellcheck="false" autocapitalize="off" placeholder="203.0.113.7 or 2001:db8::1"></label>
+        <label class="field"><span class="flabel">Reason (optional, visible to administrators only)</span><input id="ipReason" class="txt" maxlength="500"></label>
+        <div class="ip-actions"><button type="submit" class="btn danger" id="ipBan">Ban IP</button><button type="button" class="btn" id="ipRestore">Restore IP</button></div>
+      </form>
+      <div class="ip-check"><button type="button" class="btn small" id="ipCheck">Check IP detection</button><p id="ipCheckOut" class="small" aria-live="polite"></p></div>
+      <div class="adm-bar">
+        <label class="adm-search"><span class="sr">Search IP addresses</span><input type="search" id="ipQ" class="txt" placeholder="Search IP or reason" autocomplete="off"></label>
+        <label class="ip-filter"><span class="sr">Filter by status</span><select id="ipStatus" class="plan-sel"><option value="">All statuses</option><option value="banned">Banned</option><option value="restored">Restored</option></select></label>
+        <span id="ipCount" class="small"></span>
+      </div>
+      <div class="table-wrap">
+        <table class="users ips">
+          <thead><tr><th scope="col">IP address</th><th scope="col">Status</th><th scope="col">Banned</th><th scope="col">Reason</th><th scope="col">Restored</th><th scope="col" class="num">Blocked attempts</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>
+          <tbody id="ipRows"></tbody>
+        </table>
+      </div>
+      <div class="pager"><button type="button" class="btn small" id="ipPrev">Previous</button><span id="ipPage" class="small"></span><button type="button" class="btn small" id="ipNext">Next</button></div>
+    </section>
   </section>
 </main>
+<p class="legal"><a href="privacy.html">Privacy Policy</a><span aria-hidden="true"> · </span><a href="terms.html">Terms of Service</a></p>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="vendor/supabase.js"></script>
